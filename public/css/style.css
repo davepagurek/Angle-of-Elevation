@@ -1,8 +1,60 @@
-body {
-  padding: 50px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+/* Game */
+#game {
+  width:800px;
+  height:500px;
+  margin:40px auto;
+  overflow-x:hidden;
+  overflow-y:hidden;
+  background-color:#555;
+  position:relative;
 }
 
-a {
-  color: #00B7FF;
+#stage {
+  position:absolute;
+  top:0;
+  left:0;
+  right:0;
+  height:auto;
+  transition: all 0.4s ease;
+}
+
+.floor {
+  height:200px;
+  background-color:#efded3;
+  border-bottom:10px solid #a08f84;
+}
+
+.floor:nth-child(even) {
+  background-color:#ccbaae;
+}
+
+.door {
+  float:left;
+  width:80px;
+  height:137px;
+  margin:60px 30px 0 30px;
+  background-color:#666;
+  border-left:3px solid #555;
+  border-right:3px solid #555;
+  border-top:3px solid #555;
+}
+.queue {
+  height:200px;
+  width:660px;
+  margin-left:140px;
+}
+
+
+/* Page */
+body {
+  margin:0;
+  padding:0;
+  background-color:#222;
+  color:#EEE;
+  font-family: 'Open Sans', sans-serif;
+}
+
+h1 {
+  text-align:center;
+  margin:40px auto;
 }

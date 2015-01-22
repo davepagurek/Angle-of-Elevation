@@ -32,9 +32,25 @@ app.use(function(err, req, res, next) {
 });
 
 
+
+var floors = 5;
+var users = [];
+
+
 io.sockets.on('connection', function (socket) {
-  console.log('A new user connected!');
-  socket.emit('test', { msg: 'hello world' });
+  
+  var floor = Math.round(Math.random()*(floors-1));
+  
+  users.push({
+    id: socket.id,
+    floor: floor
+  });
+  
+  io.sockets.emit('connected', {
+    floors: floors,
+    id: socket.id,
+    users: users
+  });
 });
 
 
