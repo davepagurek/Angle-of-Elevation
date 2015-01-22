@@ -44,6 +44,18 @@
   margin-left:140px;
 }
 
+.user {
+  width:50px;
+  height:120px;
+  margin: 80px 25px 0 25px;
+  background-color: #574848;
+  position:absolute;
+}
+
+#me {
+  background-color: #902121;
+}
+
 
 /* Page */
 body {

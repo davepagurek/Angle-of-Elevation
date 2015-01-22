@@ -34,23 +34,27 @@ app.use(function(err, req, res, next) {
 
 
 var floors = 5;
-var users = [];
+var users = {};
 
 
-io.sockets.on('connection', function (socket) {
+io.sockets.on("connection", function (socket) {
   
   var floor = Math.round(Math.random()*(floors-1));
   
-  users.push({
-    id: socket.id,
+  users[socket.id] = {
     floor: floor
-  });
+  };
   
-  io.sockets.emit('connected', {
+  io.sockets.emit("connected", {
     floors: floors,
     id: socket.id,
     users: users
   });
+});
+
+io.sockets.on("disconnect", function(socket) {
+  delete users[socket.id];
+  io.sockets.emit("disconnect", socket.id);
 });
 
 
