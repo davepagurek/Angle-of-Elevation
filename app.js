@@ -42,22 +42,26 @@ io.sockets.on("connection", function (socket) {
   var floor = Math.round(Math.random()*(floors-1));
   
   users[socket.id] = {
-    floor: floor
+    floor: floor,
+    id: socket.id
   };
   
-  io.sockets.emit("connected", {
+  socket.emit("info", {
     floors: floors,
     id: socket.id,
     users: users
   });
+  
+  io.sockets.emit("connected", {
+    id: socket.id,
+    floor: users[socket.id].floor
+  });
+  
+  socket.on("disconnect", function() {
+    delete users[socket.id];
+    io.sockets.emit("disconnected", socket.id);
+  });
 });
-
-io.sockets.on("disconnect", function(socket) {
-  delete users[socket.id];
-  io.sockets.emit("disconnect", socket.id);
-});
-
-
 
 
 module.exports = app;

@@ -1,7 +1,7 @@
 /* Game */
 #game {
   width:800px;
-  height:500px;
+  height:600px;
   margin:40px auto;
   overflow-x:hidden;
   overflow-y:hidden;
@@ -16,6 +16,37 @@
   right:0;
   height:auto;
   transition: all 0.4s ease;
+}
+
+#sky {
+  height:280px;
+  background: rgba(5,22,107,1);
+  background: -moz-linear-gradient(top, rgba(5,22,107,1) 0%, rgba(5,22,107,1) 50%, rgba(164,120,230,1) 100%);
+  background: -webkit-gradient(left top, left bottom, color-stop(0%, rgba(5,22,107,1)), color-stop(50%, rgba(5,22,107,1)), color-stop(100%, rgba(164,120,230,1)));
+  background: -webkit-linear-gradient(top, rgba(5,22,107,1) 0%, rgba(5,22,107,1) 50%, rgba(164,120,230,1) 100%);
+  background: -o-linear-gradient(top, rgba(5,22,107,1) 0%, rgba(5,22,107,1) 50%, rgba(164,120,230,1) 100%);
+  background: -ms-linear-gradient(top, rgba(5,22,107,1) 0%, rgba(5,22,107,1) 50%, rgba(164,120,230,1) 100%);
+  background: linear-gradient(to bottom, rgba(5,22,107,1) 0%, rgba(5,22,107,1) 50%, rgba(164,120,230,1) 100%);
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#05166b', endColorstr='#a478e6', GradientType=0 );
+  border-bottom:20px solid #1d1b16;
+}
+
+#sky:before {
+  content: "";
+  width:60px;
+  height:60px;
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+  border-radius:50%;
+  position:absolute;
+  top: 150px;
+  right: 50px;
+  background-color:#FFF;
+  opacity:0.7;
+}
+
+#ground {
+  background-color:#534232;
+  height:300px;
 }
 
 .floor {
@@ -50,6 +81,20 @@
   margin: 80px 25px 0 25px;
   background-color: #574848;
   position:absolute;
+  transition: all ease 0.4s;
+}
+
+.user.animated {
+  -webkit-animation-duration: 1s;
+          animation-duration: 1s;
+  -webkit-animation-fill-mode: backwards;
+          animation-fill-mode: backwards;
+  -webkit-animation-name: bounceInRight;
+          animation-name: bounceInRight;
+}
+
+.user.disconnected {
+  opacity:0;
 }
 
 #me {
@@ -69,4 +114,74 @@ body {
 h1 {
   text-align:center;
   margin:40px auto;
+}
+
+
+/* Animations */
+@-webkit-keyframes bounceInRight {
+  0%, 60%, 75%, 90%, 100% {
+    -webkit-transition-timing-function: cubic-bezier(0.215, 0.610, 0.355, 1.000);
+            transition-timing-function: cubic-bezier(0.215, 0.610, 0.355, 1.000);
+  }
+
+  0% {
+    opacity: 0;
+    -webkit-transform: translate3d(3000px, 0, 0);
+            transform: translate3d(3000px, 0, 0);
+  }
+
+  60% {
+    opacity: 1;
+    -webkit-transform: translate3d(-25px, 0, 0);
+            transform: translate3d(-25px, 0, 0);
+  }
+
+  75% {
+    -webkit-transform: translate3d(10px, 0, 0);
+            transform: translate3d(10px, 0, 0);
+  }
+
+  90% {
+    -webkit-transform: translate3d(-5px, 0, 0);
+            transform: translate3d(-5px, 0, 0);
+  }
+
+  100% {
+    -webkit-transform: none;
+            transform: none;
+  }
+}
+
+@keyframes bounceInRight {
+  0%, 60%, 75%, 90%, 100% {
+    -webkit-transition-timing-function: cubic-bezier(0.215, 0.610, 0.355, 1.000);
+            transition-timing-function: cubic-bezier(0.215, 0.610, 0.355, 1.000);
+  }
+
+  0% {
+    opacity: 0;
+    -webkit-transform: translate3d(3000px, 0, 0);
+            transform: translate3d(3000px, 0, 0);
+  }
+
+  60% {
+    opacity: 1;
+    -webkit-transform: translate3d(-25px, 0, 0);
+            transform: translate3d(-25px, 0, 0);
+  }
+
+  75% {
+    -webkit-transform: translate3d(10px, 0, 0);
+            transform: translate3d(10px, 0, 0);
+  }
+
+  90% {
+    -webkit-transform: translate3d(-5px, 0, 0);
+            transform: translate3d(-5px, 0, 0);
+  }
+
+  100% {
+    -webkit-transform: none;
+            transform: none;
+  }
 }
