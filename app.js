@@ -5,8 +5,12 @@ var logger = require('morgan');
 var bodyParser = require('body-parser');
 
 var app = express();
-var server = app.listen(3000);
-var io = require('socket.io').listen(server);
+var http = require('http').createServer(app);
+var io = require('socket.io');
+io = io.listen(http.listen(process.env.PORT||3000, function(){
+  console.log('listening on port '+ process.env.PORT||3000);
+}));
+//var io = require('socket.io').listen(server);
 
 //app.use(favicon(__dirname + '/public/favicon.ico'));
 app.use(bodyParser.json());
