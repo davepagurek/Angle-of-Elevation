@@ -60,6 +60,12 @@
 }
 
 .door {
+  cursor:pointer;
+  text-align:center;
+  font-size: 30px;
+  color:#444;
+  font-weight:bold;
+  line-height: 137px;
   float:left;
   width:80px;
   height:137px;

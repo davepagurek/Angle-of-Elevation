@@ -27,6 +27,8 @@ window.addEventListener("load", function() {
       element: floor,
       queue: []
     });
+    
+    door.innerHTML = floors.length;
   };
   
   var addUser = function(user) {
