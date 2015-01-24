@@ -10,6 +10,7 @@ var io = require('socket.io');
 io = io.listen(http.listen(process.env.PORT||3000, function(){
   console.log('listening on port '+ process.env.PORT||3000);
 }));
+io.settings.log = false;
 //var io = require('socket.io').listen(server);
 
 //app.use(favicon(__dirname + '/public/favicon.ico'));
