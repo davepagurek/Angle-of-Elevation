@@ -40,6 +40,10 @@ app.use(function(err, req, res, next) {
 
 var floors = 5;
 var users = {};
+var elevator = {
+  floor: Math.round(Math.random()*(floors-1)),
+  users: []
+};
 
 
 io.sockets.on("connection", function (socket) {
@@ -54,7 +58,8 @@ io.sockets.on("connection", function (socket) {
   socket.emit("info", {
     floors: floors,
     id: socket.id,
-    users: users
+    users: users,
+    elevator: elevator
   });
   
   io.sockets.emit("connected", {

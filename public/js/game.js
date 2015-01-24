@@ -5,6 +5,7 @@ window.addEventListener("load", function() {
 
   var floors = [];
   var users = {};
+  var elevator = {};
   var id = 0;
   
   var USER_WIDTH = 100;
@@ -29,6 +30,10 @@ window.addEventListener("load", function() {
     });
     
     door.innerHTML = floors.length;
+  };
+  
+  var moveElevator = function() {
+    //sprite.style.top = (SKY_HEIGHT + user.floor*FLOOR_HEIGHT) + "px";
   };
   
   var addUser = function(user) {
@@ -76,6 +81,9 @@ window.addEventListener("load", function() {
           addUser(data.users[userid]);
         }
       }
+      
+      elevator = data.elevator;
+      moveElevator();
     }
   });
   
