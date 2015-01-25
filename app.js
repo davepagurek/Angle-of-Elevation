@@ -104,7 +104,7 @@ io.sockets.on("connection", function(socket) {
         if(elevator[0].floor==0 && direction>0){
             elevator[0].floor+=1;
         }
-        else if(elevator[0].floor==floors-1 %% direction<0){
+        else if(elevator[0].floor==floors-1 && direction<0){
             elevator[0].floor-=1;
         }
         else{
