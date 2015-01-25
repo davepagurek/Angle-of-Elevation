@@ -69,7 +69,11 @@ io.sockets.on("connection", function (socket) {
   users[socket.id] = {
     floor: floor,
     id: socket.id,
-    command: ""
+    command:{
+      direction: "";
+      door: "";
+      action: ""  
+    }
   };
   
   socket.emit("info", {
