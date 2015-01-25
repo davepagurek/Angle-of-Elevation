@@ -66,6 +66,7 @@ io.sockets.on("connection", function(socket) {
 
     users[socket.id] = {
         floor: floor,
+        elevator:elevator,
         id: socket.id,
         command: {
             direction: "",
@@ -96,10 +97,11 @@ io.sockets.on("connection", function(socket) {
         if (buttons.up_down[0] > buttons.up_down[1])
             direction = 1;
         else if (buttons.up_down[0] < buttons.up_down[1])
-            direction = 0;
+            direction = -1;
         else
-            direction = Math.round(Math.random());
-
+            direction = Math.round(Math.random())*2-1;
+        
+        elevator[0].floor+=direction;
 
         if (buttons.open_close[0] > buttons.open_close[1])
             door = 1;
@@ -107,12 +109,31 @@ io.sockets.on("connection", function(socket) {
             door = 0;
         else
             door = Math.round(Math.random());
+        
+    }
+    
+    function setUserInfo(){
+        for(userid in users){
+            if(users[userid].elevator == true){
+                users[userid].floor+=direction;
+                if(door==1 && users[userid].command.action=="OUT"){
+                    users[userid].elevator = false;
+                }
+            }
+            else if(users[userid].elevator==false){
+                if(users[userid].floor==elevator[0].floor &&
+                  users[userid].command.action=="IN"){
+                    users[userid].elevator=true;
+                }
+            }
+        }
     }
 
     function votingTimer() {
         collectData();
         getNewElevatorInfo();
-
+        setUserInfo();
+        
         io.sockets.emit("reset_command", {
             elevator: elevator,
             users: users
