@@ -38,6 +38,7 @@ app.use(function(err, req, res, next) {
 
 
 
+var myVar=setInterval(function () {votingTimer()}, 5000);
 var floors = 5;
 var users = {};
 var elevator = {
@@ -45,18 +46,20 @@ var elevator = {
   users: []
 };
 
+//Initialize buttons of elevator  
+var buttons = {
+    up_down: [0,0],
+    open_clos:[0,0]
+};
+
+
+function votingTimer() {
+  io.sockets.emit("reset_command");
+}
 
 io.sockets.on("connection", function (socket) {
-  
   var floor = Math.round(Math.random()*(floors-1));
-  var myVar=setInterval(function () {votingTimer()}, 5000);
-
-  function votingTimer() {
-    io.sockets.emit("reset_command", {
-      id: socket.id,
-      command: ""
-    });
-  }
+  
   
   users[socket.id] = {
     floor: floor,
@@ -89,6 +92,5 @@ io.sockets.on("connection", function (socket) {
     });
   });
 });
-
 
 module.exports = app;
