@@ -51,6 +51,7 @@ var elevator = [{
     users: []
 }];
 
+
 //Initialize global buttons of elevator
 //For up_down-->[number of UP, number of DOWN]
 //For open_close-->[number of OPEN, number of CLOSE]
@@ -98,13 +99,13 @@ io.sockets.on("connection", function(socket) {
             direction = 1;
         else if (buttons.up_down[0] < buttons.up_down[1])
             direction = -1;
-        else
-            direction = Math.round(Math.random())*2-1;
+        //else
+        //    direction = Math.round(Math.random())*2-1;
         
-        if(elevator[0].floor==0 && direction>0){
+        if(elevator[0].floor==floors && direction>0){
             elevator[0].floor+=1;
         }
-        else if(elevator[0].floor==floors-1 && direction<0){
+        else if(elevator[0].floor==1 && direction<0){
             elevator[0].floor-=1;
         }
         else{
@@ -115,8 +116,8 @@ io.sockets.on("connection", function(socket) {
             door = 1;
         else if (buttons.open_close[0] < buttons.open_close[1])
             door = 0;
-        else
-            door = Math.round(Math.random());
+       // else
+      //  door = Math.round(Math.random());
         
     }
     
@@ -141,6 +142,12 @@ io.sockets.on("connection", function(socket) {
         collectData();
         getNewElevatorInfo();
         setUserInfo();
+        
+        direction=0;
+        door=0;
+        action=0;
+        buttons.open_close=[0,0];
+        buttons.up_down=[0,0];
         
         io.sockets.emit("reset_command", {
             elevator: elevator,
