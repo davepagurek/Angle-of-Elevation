@@ -43,9 +43,8 @@ app.use(function(err, req, res, next) {
 
 var floors = 5;
 var users = {};
-var direction;
-var door;
-var action;
+var direction =0;
+var door = 0;
 var elevator = [{
     floor: Math.round(Math.random() * (floors - 1)),
     users: []
@@ -67,7 +66,7 @@ io.sockets.on("connection", function(socket) {
 
     users[socket.id] = {
         floor: floor,
-        elevator:elevator,
+        elevator:false,
         id: socket.id,
         command: {
             direction: "",
@@ -75,89 +74,6 @@ io.sockets.on("connection", function(socket) {
             action: ""
         }
     };
-
-
-    function collectData() {
-        //Function to count the number of vote for up/down and open/close    
-
-        for (var userid in users) {
-            if (users[userid].command.direction == "UP")
-                buttons.up_down[0] ++;
-            else if (users[userid].command.direction == "DOWN")
-                buttons.up_down[1] ++;
-            if (users[userid].command.door == "OPEN")
-                buttons.open_close[0] ++;
-            else if (users[userid].command.door == "CLOSE")
-                buttons.open_close[1] ++;
-        }
-
-    }
-
-    function getNewElevatorInfo() {
-
-        if (buttons.up_down[0] > buttons.up_down[1])
-            direction = 1;
-        else if (buttons.up_down[0] < buttons.up_down[1])
-            direction = -1;
-        //else
-        //    direction = Math.round(Math.random())*2-1;
-        
-        if(elevator[0].floor==floors && direction>0){
-            elevator[0].floor+=1;
-        }
-        else if(elevator[0].floor==1 && direction<0){
-            elevator[0].floor-=1;
-        }
-        else{
-            elevator[0].floor+=direction;
-        }
-
-        if (buttons.open_close[0] > buttons.open_close[1])
-            door = 1;
-        else if (buttons.open_close[0] < buttons.open_close[1])
-            door = 0;
-       // else
-      //  door = Math.round(Math.random());
-        
-    }
-    
-    function setUserInfo(){
-        for(userid in users){
-            if(users[userid].elevator == true){        
-                users[userid].floor=elevator[0].floor;
-                if(door==1 && users[userid].command.action=="OUT"){
-                    users[userid].elevator = false;
-                }
-            }
-            else if(users[userid].elevator==false){
-                if(users[userid].floor==elevator[0].floor &&
-                  users[userid].command.action=="IN"){
-                    users[userid].elevator=true;
-                }
-            }
-        }
-    }
-
-    function votingTimer() {
-        collectData();
-        getNewElevatorInfo();
-        setUserInfo();
-        
-        direction=0;
-        door=0;
-        action=0;
-        buttons.open_close=[0,0];
-        buttons.up_down=[0,0];
-        
-        io.sockets.emit("reset_command", {
-            elevator: elevator,
-            users: users
-        });
-    }
-
-    var myVar = setInterval(function() {
-        votingTimer()
-    }, 5000);
 
     socket.emit("info", {
         floors: floors,
@@ -189,5 +105,97 @@ io.sockets.on("connection", function(socket) {
         });
     });
 });
+
+
+
+ //Function to count the number of vote for up/down and open/close    
+function collectData() {
+
+        for (var userid in users) {
+            if (users[userid].command.direction == "UP")
+                buttons.up_down[0] ++;
+            else if (users[userid].command.direction == "DOWN")
+                buttons.up_down[1] ++;
+            if (users[userid].command.door == "OPEN")
+                buttons.open_close[0] ++;
+            else if (users[userid].command.door == "CLOSE")
+                buttons.open_close[1] ++;
+        }
+
+    }
+
+    //Depending of commands, set the new state of the elevator
+
+    function getNewElevatorInfo() {
+
+        if (buttons.up_down[0] > buttons.up_down[1]){
+            direction = -1;
+        }
+        else if (buttons.up_down[0] < buttons.up_down[1]){
+            direction = 1;
+        }
+        //else
+        //    direction = Math.round(Math.random())*2-1;
+        
+        if(elevator[0].floor==floors-1 && direction>0){
+            elevator[0].floor-=1;
+        }
+        else if(elevator[0].floor==0 && direction<0){
+            elevator[0].floor+=1;
+        }
+        else{
+            elevator[0].floor+=direction;
+        }
+
+        if (buttons.open_close[0] > buttons.open_close[1])
+            door = 1;
+        else if (buttons.open_close[0] < buttons.open_close[1])
+            door = 0;
+       // else
+      //  door = Math.round(Math.random());
+        
+    }
+    
+
+    //Depending of info, set each users info
+    function setUserInfo(){
+        for(var userid in users){
+            if(users[userid].elevator == true){        
+                users[userid].floor=elevator[0].floor;
+                if(door==1 && users[userid].command.action=="OUT"){
+                    users[userid].elevator = false;
+                }
+            }
+            else if(users[userid].elevator==false){
+                if(users[userid].floor==elevator[0].floor &&
+                  users[userid].command.action=="IN"){
+                    users[userid].elevator=true;
+                }
+            }
+            else{}
+            console.log("" + elevator[0].floor+"  "+ users[userid].floor+"    "+users[userid].elevator);
+        }
+    }
+
+    //execute every times at the end of turn
+    function votingTimer() {
+        collectData();
+        getNewElevatorInfo();
+        setUserInfo();
+        
+        direction=0;
+        door=0;
+        action=0;
+        buttons.open_close=[0,0];
+        buttons.up_down=[0,0];
+        io.sockets.emit("reset_command", {
+            elevator: elevator,
+            users: users
+        });
+    }
+
+    var myVar = setInterval(function() {
+        votingTimer()
+    }, 5000);
 
 module.exports = app;
