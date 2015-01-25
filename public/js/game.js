@@ -124,7 +124,7 @@ window.addEventListener("load", function() {
         }
       }
       
-      for (var elevatorid in data.elevator){
+      for (var i=0; i<data.elevator.length; i++){
         addElevator();
       }
 

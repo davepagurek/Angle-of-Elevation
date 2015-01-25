@@ -41,10 +41,12 @@ app.use(function(err, req, res, next) {
 var myVar=setInterval(function () {votingTimer()}, 5000);
 var floors = 5;
 var users = {};
-var elevator = {
-  floor: Math.round(Math.random()*(floors-1)),
-  users: []
-};
+var elevator = [
+  {
+    floor: Math.round(Math.random()*(floors-1)),
+    users: []
+  }
+];
 
 //Initialize global buttons of elevator
 //For up_down-->[number of UP, number of DOWN]
@@ -73,7 +75,7 @@ io.sockets.on("connection", function (socket) {
     }
   };
     
-  function(){
+  function setCommandState(){
       if(users[socket.id].command.direction=="UP")
           buttons.up_down[0]++;
       else if(users[socket.id].command.direction=="DOWN")
@@ -81,7 +83,7 @@ io.sockets.on("connection", function (socket) {
       if(users[socket.id].command.direction=="OPEN")
           buttons.open_close[0]++;
       else if(users[socket.id].command.direction=="CLOSE")
-          buttons.open_close[0]++;
+          buttons.open_close[1]++;
   }
   
   socket.emit("info", {
@@ -99,7 +101,13 @@ io.sockets.on("connection", function (socket) {
   });
 
   socket.on("inc_command", function(data) {
-    users[socket.id].command = data.command;
+    if (data.command == "UP" || data.command == "DOWN") {  
+      users[socket.id].command.direction = data.command;
+    } else if (data.command == "IN" || data.command == "OUT") {  
+      users[socket.id].command.action = data.command;
+    } else if (data.command == "OPEN" || data.command == "CLOSE") {  
+      users[socket.id].command.door = data.command;
+    }
     io.sockets.emit("out_command", {
       id: socket.id,
       command: data.command
