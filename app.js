@@ -46,6 +46,18 @@ var elevator = {
   users: []
 };
 
+//Initialize buttons inside and outside of elevator  
+var buttons = {
+    inside: [],
+    outside_up:[],
+    outside_down:[]
+};
+function(var i=0;i<floors;i++){  
+    buttons.inside.push(0);
+    buttons.outside_down(0);
+    buttons.outside_up(0);
+}
+
 function votingTimer() {
   io.sockets.emit("reset_command");
 }
