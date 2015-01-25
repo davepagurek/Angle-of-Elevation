@@ -46,10 +46,12 @@ var elevator = {
   users: []
 };
 
-//Initialize buttons of elevator  
+//Initialize global buttons of elevator
+//For up_down-->[number of UP, number of DOWN]
+//For open_close-->[number of OPEN, number of CLOSE]
 var buttons = {
     up_down: [0,0],
-    open_clos:[0,0]
+    open_close:[0,0]
 };
 
 
@@ -70,6 +72,17 @@ io.sockets.on("connection", function (socket) {
       action: ""  
     }
   };
+    
+  function(){
+      if(users[socket.id].command.direction=="UP")
+          buttons.up_down[0]++;
+      else if(users[socket.id].command.direction=="DOWN")
+          buttons.up_down[1]++;
+      if(users[socket.id].command.direction=="OPEN")
+          buttons.open_close[0]++;
+      else if(users[socket.id].command.direction=="CLOSE")
+          buttons.open_close[0]++;
+  }
   
   socket.emit("info", {
     floors: floors,
