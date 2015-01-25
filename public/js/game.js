@@ -40,6 +40,14 @@ window.addEventListener("load", function() {
     
     door.innerHTML = floors.length;
   };
+
+  //making an elevator object
+  var addElevator = function() {
+    var elevator = document.createElement("div");
+    elevator.className = "elevator";
+
+    stage.appendChild(elevator);
+  };
   
   var moveElevator = function() {
     //sprite.style.top = (SKY_HEIGHT + user.floor*FLOOR_HEIGHT) + "px";
@@ -115,7 +123,11 @@ window.addEventListener("load", function() {
         }
       }
       
-      elevator = data.elevator;
+      for (var elevatorid in data.elevator){
+        addElevator();
+      }
+
+      //elevator = data.elevator;
       moveElevator();
     }
   });
