@@ -14,18 +14,12 @@ window.addEventListener("load", function() {
   var SKY_HEIGHT = 300;
   
   var commands = {
-    38: "UP",
-    40: "DOWN",
-    48: "0",
-    49: "1",
-    50: "2",
-    51: "3",
-    52: "4",
-    53: "5",
-    54: "6",
-    55: "7",
-    56: "8",
-    57: "9"
+    87: "UP",
+    83: "DOWN",
+    65: "IN",
+    68: "OUT",
+    81: "OPEN",
+    69: "CLOSE"
   };
   
 
@@ -76,23 +70,27 @@ window.addEventListener("load", function() {
   };
   
   var updateCommand = function(user, command) {
-    users[user].command = command;
-    users[user].sprite.classList.remove("commandUp");
-    users[user].sprite.classList.remove("commandDown");
-    users[user].sprite.classList.remove("commandNumber");
-    users[user].sprite.innerHTML = "";
-    
-    if (command == "UP") {
-      users[user].sprite.classList.add("commandUp");
-    } else if (command == "DOWN") {
-      users[user].sprite.classList.add("commandDown");
-    } else {
-      users[user].sprite.classList.add("commandNumber");
-      users[user].sprite.innerHTML = command;
+    if (command == "UP" || command == "DOWN") {
+      users[user].command.direction = command;
+    } else if (command == "IN" || command == "OUT") {
+      users[user].command.action = command;
+    } else if (command == "OPEN" || command == "CLOSE") {
+      users[user].command.door = command;
+    } else if (command == "") {
+      
+      //reset all
+      users[user].command.direction = "";
+      users[user].command.action = "";
+      users[user].command.door = "";
     }
     
-    //temporary, for testing. will be done with css eventually
-    users[user].sprite.innerHTML = command;
+    users[user].sprite.innerHTML = users[user].command.door + "<br>" + users[user].command.direction + "<br>" + users[user].command.action;
+    users[user].sprite.classList.add("bounce");
+    users[user].sprite.addEventListener("animationend", function transitionend(event) {
+      this.classList.remove("bounce");
+      this.removeEventListener('animationend', transitionEnd, false);
+    }, false);
+    
   };
 
   socket.on('info', function (data) {
@@ -161,7 +159,7 @@ window.addEventListener("load", function() {
   
   
   //Send commands
-  window.addEventListener("keyup", function(event) {
+  window.addEventListener("keydown", function(event) {
     if (commands[event.keyCode]) {
       var newCommand = commands[event.keyCode];
       if (users[id].command != newCommand) {
@@ -171,7 +169,8 @@ window.addEventListener("load", function() {
       }
       event.preventDefault();
       return false;
-    } 
+    }
+    return true;
   });
   
 });
