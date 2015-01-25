@@ -67,8 +67,8 @@ io.sockets.on("connection", function (socket) {
     floor: floor,
     id: socket.id,
     command:{
-      direction: "";
-      door: "";
+      direction: "",
+      door: "",
       action: ""  
     }
   };
