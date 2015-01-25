@@ -42,11 +42,13 @@ window.addEventListener("load", function() {
   };
 
   //making an elevator object
-  var addElevator = function() {
+  var addElevator = function(floor_number) {
     var elevator = document.createElement("div");
     elevator.className = "elevator";
+    elevator.style.top = (SKY_HEIGHT + floor_number*FLOOR_HEIGHT) + "px";
 
     stage.appendChild(elevator);
+
   };
   
   var moveElevator = function() {
@@ -124,7 +126,7 @@ window.addEventListener("load", function() {
       }
       
       for (var elevatorid in data.elevator){
-        addElevator();
+        addElevator(elevatorid.floor);
       }
 
       //elevator = data.elevator;
