@@ -209,7 +209,7 @@ window.addEventListener("load", function() {
   socket.on("reset_command", function(data) {
     for (var i=0; i<data.elevator.length; i++){
       elevators[i].floor = data.elevator[i].floor;
-      moveElevator(data.elevator[i]);
+      moveElevator(elevators[i]);
     }
     for (var userid in data.users) {
       //users[userid].floor = data.users[userid].floor;
