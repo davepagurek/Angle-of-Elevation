@@ -192,6 +192,12 @@ function collectData() {
             elevator: elevator,
             users: users
         });
+      for (var userid in users) {
+        users[userid].command = {
+          direction: "",
+          door: "",
+          action: ""
+        });
     }
 
     var myVar = setInterval(function() {
