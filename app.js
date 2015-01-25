@@ -177,7 +177,8 @@ function collectData() {
             }
             else if(users[userid].elevator==false){
                 if(users[userid].floor==elevator[0].floor &&
-                  users[userid].command.action=="IN"){
+                  users[userid].command.action=="IN"&&
+                   door==1){
                     users[userid].elevator=true;
                 }
             }
