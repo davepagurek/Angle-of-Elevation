@@ -207,6 +207,7 @@ function collectData() {
           door: "",
           action: ""
         };
+      }
     }
 
     var myVar = setInterval(function() {
