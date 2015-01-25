@@ -22,7 +22,7 @@ window.addEventListener("load", function() {
     69: "CLOSE"
   };
   
-
+  //creating a floor 
   var addFloor = function() {
     var floor = document.createElement("div");
     floor.className = "floor";
@@ -108,16 +108,16 @@ window.addEventListener("load", function() {
     if (user.elevator != user2.elevator || user2.elevator) {
       if (user2.elevator) {
         if (!user.elevator) {
-          floors[user.floor].queue = floors[exiting.floor].queue.filter(function(element) {
-            return (element.id != data);
+          floors[user.floor].queue = floors[user.floor].queue.filter(function(element) {
+            return (element.id != user.id);
           });
           
           //Shift waiting users over
-          for (var i=0; i<floors[exiting.floor].queue.length; i++) {
-            floors[exiting.floor].queue[i].sprite.style.left = (DOOR_WIDTH + i*USER_WIDTH) + "px";
+          for (var i=0; i<floors[user.floor].queue.length; i++) {
+            floors[user.floor].queue[i].sprite.style.left = (DOOR_WIDTH + i*USER_WIDTH) + "px";
           }
         }
-        user.sprite.style.left = "0px";
+        user.sprite.style.left = "10px";
         user.sprite.style.top = (SKY_HEIGHT + elevators[0].floor*FLOOR_HEIGHT) + "px";
       } else {
         user.floor = user2.floor;
@@ -127,13 +127,13 @@ window.addEventListener("load", function() {
       }
       user.elevator = user2.elevator;
     } else if (user.floor != user2.floor) {
-      floors[user.floor].queue = floors[exiting.floor].queue.filter(function(element) {
+      floors[user.floor].queue = floors[user.floor].queue.filter(function(element) {
         return (element.id != data);
       });
       
       //Shift waiting users over
-      for (var i=0; i<floors[exiting.floor].queue.length; i++) {
-        floors[exiting.floor].queue[i].sprite.style.left = (DOOR_WIDTH + i*USER_WIDTH) + "px";
+      for (var i=0; i<floors[user.floor].queue.length; i++) {
+        floors[user.floor].queue[i].sprite.style.left = (DOOR_WIDTH + i*USER_WIDTH) + "px";
       }
 
       user.floor = user2.floor;
@@ -144,6 +144,8 @@ window.addEventListener("load", function() {
     }
 
     if (id == user.id) {
+      user.floor = user2.floor;
+      console.log((0 - SKY_HEIGHT - user.floor*FLOOR_HEIGHT + 150) + "px");
       stage.style.top = (0 - SKY_HEIGHT - user.floor*FLOOR_HEIGHT + 150) + "px";
     }
   };
