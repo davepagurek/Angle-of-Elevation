@@ -95,7 +95,7 @@
   position:absolute;
   transition: all ease 0.4s;
   text-align:center;
-  line-height: 120px;
+  line-height: 40px;
   font-size: 15px;
   color:rgba(255, 255, 255, 0.5);
 }
