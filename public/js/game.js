@@ -13,6 +13,21 @@ window.addEventListener("load", function() {
   var FLOOR_HEIGHT = 210;
   var SKY_HEIGHT = 300;
   
+  var commands = {
+    38: "UP",
+    40: "DOWN",
+    48: "0",
+    49: "1",
+    50: "2",
+    51: "3",
+    52: "4",
+    53: "5",
+    54: "6",
+    55: "7",
+    56: "8",
+    57: "9"
+  };
+  
 
   var addFloor = function() {
     var floor = document.createElement("div");
@@ -58,6 +73,26 @@ window.addEventListener("load", function() {
     users[user.id] = user;
     users[user.id].sprite = sprite;
     floors[user.floor].queue.push(users[user.id]);
+  };
+  
+  var updateCommand = function(user, command) {
+    users[user].command = command;
+    users[user].sprite.classList.remove("commandUp");
+    users[user].sprite.classList.remove("commandDown");
+    users[user].sprite.classList.remove("commandNumber");
+    users[user].sprite.innerHTML = "";
+    
+    if (command == "UP") {
+      users[user].sprite.classList.add("commandUp");
+    } else if (command == "DOWN") {
+      users[user].sprite.classList.add("commandDown");
+    } else {
+      users[user].sprite.classList.add("commandNumber");
+      users[user].sprite.innerHTML = command;
+    }
+    
+    //temporary, for testing. will be done with css eventually
+    users[user].sprite.innerHTML = command;
   };
 
   socket.on('info', function (data) {
@@ -112,6 +147,31 @@ window.addEventListener("load", function() {
       
       delete users[data];
     }, 500);
+  });
+  
+  socket.on("out_command", function(data) {
+    updateCommand(data.id, data.command);
+  });
+  
+  socket.on("reset_command", function(data) {
+    for (var userid in users) {
+      updateCommand(userid, "");
+    }
+  });
+  
+  
+  //Send commands
+  window.addEventListener("keyup", function(event) {
+    if (commands[event.keyCode]) {
+      var newCommand = commands[event.keyCode];
+      if (users[id].command != newCommand) {
+        socket.emit("inc_command", {
+          command: newCommand
+        });
+      }
+      event.preventDefault();
+      return false;
+    } 
   });
   
 });
