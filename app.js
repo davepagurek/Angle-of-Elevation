@@ -127,6 +127,7 @@ function collectData() {
     //Depending of commands, set the new state of the elevator
 
     function getNewElevatorInfo() {
+        direction=0;
 
         if (buttons.up_down[0] > buttons.up_down[1]){
             direction = -1;
