@@ -49,10 +49,19 @@ var elevator = {
 io.sockets.on("connection", function (socket) {
   
   var floor = Math.round(Math.random()*(floors-1));
+  var myVar=setInterval(function () {votingTimer()}, 5000);
+
+  function votingTimer() {
+    io.sockets.emit("reset_command", {
+      id: socket.id,
+      command: ""
+    });
+  }
   
   users[socket.id] = {
     floor: floor,
-    id: socket.id
+    id: socket.id,
+    command: ""
   };
   
   socket.emit("info", {
@@ -70,6 +79,14 @@ io.sockets.on("connection", function (socket) {
   socket.on("disconnect", function() {
     delete users[socket.id];
     io.sockets.emit("disconnected", socket.id);
+  });
+
+  socket.on("inc_command", function(data) {
+    users[socket.id].command = data.command;
+    io.sockets.emit("out_command", {
+      id: socket.id,
+      command: data.command
+    });
   });
 });
 
