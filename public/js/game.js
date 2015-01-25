@@ -60,7 +60,7 @@ window.addEventListener("load", function() {
     
     sprite.addEventListener("transitionend", function transitionend(event) {
       this.classList.remove("animated");
-      this.removeEventListener('transitionend', transitionEnd, false);
+      this.removeEventListener("transitionend", transitionend, false);
     }, false);
     
     stage.appendChild(sprite);
@@ -86,9 +86,10 @@ window.addEventListener("load", function() {
     
     users[user].sprite.innerHTML = users[user].command.door + "<br>" + users[user].command.direction + "<br>" + users[user].command.action;
     users[user].sprite.classList.add("bounce");
-    users[user].sprite.addEventListener("animationend", function transitionend(event) {
+    users[user].sprite.addEventListener("webkitTransitionEnd", function animationend(event) {
+      console.log(this);
       this.classList.remove("bounce");
-      this.removeEventListener('animationend', transitionEnd, false);
+      this.removeEventListener("webkitTransitionEnd", animationend, false);
     }, false);
     
   };

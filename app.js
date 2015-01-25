@@ -78,10 +78,7 @@ io.sockets.on("connection", function (socket) {
     elevator: elevator
   });
   
-  io.sockets.emit("connected", {
-    id: socket.id,
-    floor: users[socket.id].floor
-  });
+  io.sockets.emit("connected", users[socket.id]);
   
   socket.on("disconnect", function() {
     delete users[socket.id];
