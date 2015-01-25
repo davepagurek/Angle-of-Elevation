@@ -19,10 +19,12 @@
 }
 .elevator{
   width:80px;
-  height:137px;
-  color : rbga(0,0,0,1);
+  height:140px;
+  background-color : rgba(0,0,0,0.3);
   position: absolute;
-  left: 33px;
+  top:300px;
+  margin:60px 30px 0 30px;
+  transition: all ease 0.4s;
 }
 #sky {
   height:280px;
@@ -66,7 +68,7 @@
 }
 
 .door {
-  cursor:pointer;
+  cursor:default;
   text-align:center;
   font-size: 30px;
   color:#444;
