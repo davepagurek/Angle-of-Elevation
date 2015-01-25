@@ -137,20 +137,28 @@ function collectData() {
         //else
         //    direction = Math.round(Math.random())*2-1;
         
-        if(elevator[0].floor==floors-1 && direction>0){
-            elevator[0].floor-=1;
+        if(elevator[0].floor==floors-1){
+            if(direction==-1){
+                elevator[0].floor-=1;
+            }
+            else{}
         }
-        else if(elevator[0].floor==0 && direction<0){
-            elevator[0].floor+=1;
+        else if(elevator[0].floor==0){
+            if( direction==1){
+                elevator[0].floor+=1;
+            }
+            else{}
         }
         else{
             elevator[0].floor+=direction;
         }
 
-        if (buttons.open_close[0] > buttons.open_close[1])
+        if (buttons.open_close[0] > buttons.open_close[1]){
             door = 1;
-        else if (buttons.open_close[0] < buttons.open_close[1])
+        }
+        else if (buttons.open_close[0] < buttons.open_close[1]){
             door = 0;
+        }
        // else
       //  door = Math.round(Math.random());
         
