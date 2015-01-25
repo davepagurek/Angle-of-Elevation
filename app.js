@@ -101,7 +101,15 @@ io.sockets.on("connection", function(socket) {
         else
             direction = Math.round(Math.random())*2-1;
         
-        elevator[0].floor+=direction;
+        if(elevator[0].floor==0 && direction>0){
+            elevator[0].floor+=1;
+        }
+        else if(elevator[0].floor==floors-1 %% direction<0){
+            elevator[0].floor-=1;
+        }
+        else{
+            elevator[0].floor+=direction;
+        }
 
         if (buttons.open_close[0] > buttons.open_close[1])
             door = 1;
@@ -114,8 +122,8 @@ io.sockets.on("connection", function(socket) {
     
     function setUserInfo(){
         for(userid in users){
-            if(users[userid].elevator == true){
-                users[userid].floor+=direction;
+            if(users[userid].elevator == true){        
+                users[userid].floor=elevator[0].floor;
                 if(door==1 && users[userid].command.action=="OUT"){
                     users[userid].elevator = false;
                 }
