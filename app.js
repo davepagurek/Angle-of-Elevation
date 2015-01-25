@@ -197,7 +197,7 @@ function collectData() {
           direction: "",
           door: "",
           action: ""
-        });
+        };
     }
 
     var myVar = setInterval(function() {
