@@ -5,7 +5,7 @@ window.addEventListener("load", function() {
 
   var floors = [];
   var users = {};
-  var elevator = {};
+  var elevators = [];
   var id = 0;
   
   var USER_WIDTH = 100;
@@ -46,12 +46,13 @@ window.addEventListener("load", function() {
   };
 
   //making an elevator object
-  var addElevator = function(elevatorData) {
-    var elevator = document.createElement("div");
-    elevator.className = "elevator";
-    stage.appendChild(elevator);
-    elevatorData.sprite = elevator;
-    moveElevator(elevatorData);
+  var addElevator = function(elevator) {
+    var elevatorSprite = document.createElement("div");
+    elevatorSprite.className = "elevator";
+    stage.appendChild(elevatorSprite);
+    elevator.sprite = elevatorSprite;
+    moveElevator(elevator);
+    elevators.push(elevator);
   };
   
   var addUser = function(user) {
@@ -101,6 +102,50 @@ window.addEventListener("load", function() {
       }, false);
     }
     
+  };
+
+  var updatePosition = function(user, user2) {
+    if (user.elevator != user2.elevator || user2.elevator) {
+      if (user2.elevator) {
+        if (!user.elevator) {
+          floors[user.floor].queue = floors[exiting.floor].queue.filter(function(element) {
+            return (element.id != data);
+          });
+          
+          //Shift waiting users over
+          for (var i=0; i<floors[exiting.floor].queue.length; i++) {
+            floors[exiting.floor].queue[i].sprite.style.left = (DOOR_WIDTH + i*USER_WIDTH) + "px";
+          }
+        }
+        user.sprite.style.left = "0px";
+        user.sprite.style.top = (SKY_HEIGHT + elevators[0].floor*FLOOR_HEIGHT) + "px";
+      } else {
+        user.floor = user2.floor;
+        user.sprite.style.left = (DOOR_WIDTH + floors[user.floor].queue.length*USER_WIDTH) + "px";
+        user.sprite.style.top = (SKY_HEIGHT + user.floor*FLOOR_HEIGHT) + "px";
+        floors[user.floor].queue.push(users[user.id]);
+      }
+      user.elevator = user2.elevator;
+    } else if (user.floor != user2.floor) {
+      floors[user.floor].queue = floors[exiting.floor].queue.filter(function(element) {
+        return (element.id != data);
+      });
+      
+      //Shift waiting users over
+      for (var i=0; i<floors[exiting.floor].queue.length; i++) {
+        floors[exiting.floor].queue[i].sprite.style.left = (DOOR_WIDTH + i*USER_WIDTH) + "px";
+      }
+
+      user.floor = user2.floor;
+
+      user.sprite.style.left = (DOOR_WIDTH + floors[user.floor].queue.length*USER_WIDTH) + "px";
+      user.sprite.style.top = (SKY_HEIGHT + user.floor*FLOOR_HEIGHT) + "px";
+      floors[user.floor].queue.push(users[user.id]);
+    }
+
+    if (id == user.id) {
+      stage.style.top = (0 - SKY_HEIGHT - user.floor*FLOOR_HEIGHT + 150) + "px";
+    }
   };
 
   socket.on('info', function (data) {
@@ -162,8 +207,15 @@ window.addEventListener("load", function() {
   });
   
   socket.on("reset_command", function(data) {
-    for (var userid in users) {
+    for (var i=0; i<data.elevator.length; i++){
+      elevators[i].floor = data.elevator[i].floor;
+      moveElevator(data.elevator[i]);
+    }
+    for (var userid in data.users) {
+      //users[userid].floor = data.users[userid].floor;
+      //users[userid].elevator = data.users[userid].elevator;
       updateCommand(userid, "");
+      updatePosition(users[userid], data.users[userid]);
     }
   });
   
