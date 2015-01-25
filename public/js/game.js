@@ -66,12 +66,11 @@ window.addEventListener("load", function() {
       stage.style.top = (0 - SKY_HEIGHT - user.floor*FLOOR_HEIGHT + 150) + "px";
     }
     
-    sprite.addEventListener("transitionend", function transitionend(event) {
-      this.classList.remove("animated");
-      this.removeEventListener("transitionend", transitionend, false);
-    }, false);
-    
     stage.appendChild(sprite);
+    setTimeout(function() {
+      sprite.classList.remove("animated");
+    }, 1000);
+    
     users[user.id] = user;
     users[user.id].sprite = sprite;
     floors[user.floor].queue.push(users[user.id]);
@@ -93,12 +92,14 @@ window.addEventListener("load", function() {
     }
     
     users[user].sprite.innerHTML = users[user].command.door + "<br>" + users[user].command.direction + "<br>" + users[user].command.action;
-    users[user].sprite.classList.add("bounce");
-    users[user].sprite.addEventListener("webkitTransitionEnd", function animationend(event) {
-      console.log(this);
-      this.classList.remove("bounce");
-      this.removeEventListener("webkitTransitionEnd", animationend, false);
-    }, false);
+    if (users[user].sprite.className.indexOf("animated") == -1) {
+      users[user].sprite.classList.add("bounce");
+      users[user].sprite.addEventListener("webkitAnimationEnd", function animationend(event) {
+        console.log(this);
+        this.classList.remove("bounce");
+        this.removeEventListener("webkitAnimationEnd", animationend, false);
+      }, false);
+    }
     
   };
 
