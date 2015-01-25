@@ -40,19 +40,18 @@ window.addEventListener("load", function() {
     
     door.innerHTML = floors.length;
   };
+  
+  var moveElevator = function(elevator) {
+    elevator.sprite.style.top = (SKY_HEIGHT + elevator.floor*FLOOR_HEIGHT) + "px";
+  };
 
   //making an elevator object
-  var addElevator = function(floor_number) {
+  var addElevator = function(elevatorData) {
     var elevator = document.createElement("div");
     elevator.className = "elevator";
-    elevator.style.top = (SKY_HEIGHT + floor_number*FLOOR_HEIGHT) + "px";
-
     stage.appendChild(elevator);
-
-  };
-  
-  var moveElevator = function() {
-    //sprite.style.top = (SKY_HEIGHT + user.floor*FLOOR_HEIGHT) + "px";
+    elevatorData.sprite = elevator;
+    moveElevator(elevatorData);
   };
   
   var addUser = function(user) {
@@ -94,10 +93,9 @@ window.addEventListener("load", function() {
     }
     
     users[user].sprite.innerHTML = users[user].command.door + "<br>" + users[user].command.direction + "<br>" + users[user].command.action;
-    if (users[user].sprite.className.indexOf("animated") == -1) {
+    if (users[user].sprite.className.indexOf("animated") == -1 && command != "") {
       users[user].sprite.classList.add("bounce");
       users[user].sprite.addEventListener("webkitAnimationEnd", function animationend(event) {
-        console.log(this);
         this.classList.remove("bounce");
         this.removeEventListener("webkitAnimationEnd", animationend, false);
       }, false);
@@ -128,11 +126,8 @@ window.addEventListener("load", function() {
       }
       
       for (var i=0; i<data.elevator.length; i++){
-        addElevator();
+        addElevator(data.elevator[i]);
       }
-
-      //elevator = data.elevator;
-      moveElevator();
     }
   });
   
@@ -152,7 +147,6 @@ window.addEventListener("load", function() {
       floors[exiting.floor].queue = floors[exiting.floor].queue.filter(function(element) {
         return (element.id != data);
       });
-      console.log(floors[exiting.floor].queue);
       
       //Shift waiting users over
       for (var i=0; i<floors[exiting.floor].queue.length; i++) {

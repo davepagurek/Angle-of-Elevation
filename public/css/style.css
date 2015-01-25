@@ -18,13 +18,14 @@
   transition: all 0.4s ease;
 }
 .elevator{
-  width:80px;
+  width:86px;
   height:140px;
-  background-color : rgba(0,0,0,0.3);
+  background-color : rgba(247, 250, 248, 0);
   position: absolute;
   top:300px;
   margin:60px 30px 0 30px;
-  transition: all ease 0.4s;
+  transition: all ease 1s;
+  box-shadow: 0 0 20px #309ce0;
 }
 #sky {
   height:280px;

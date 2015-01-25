@@ -47,6 +47,7 @@ var elevator = [
     users: []
   }
 ];
+console.log(elevator[0].floor);
 
 //Initialize global buttons of elevator
 //For up_down-->[number of UP, number of DOWN]
